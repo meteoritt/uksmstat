@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 	}
 
 	// parse cmdline options
-	int opts = 0, active = 0, unshared = 0, shared = 1, kilobytes = 0, megabytes = 1, verbose = 0;
+	int opts = 0, active = 0, unshared = 0, shared = 0, kilobytes = 0, megabytes = 0, verbose = 0;
 	while ((opts = getopt(argc, argv, "auskmv")) != -1)
 	{
 		switch (opts)
