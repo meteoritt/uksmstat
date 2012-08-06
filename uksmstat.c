@@ -19,9 +19,18 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 int main(int argc, char **argv)
 {
+	// check if there's uksm
+	struct stat sb;
+	if (stat("/sys/kernel/mm/uksm", &sb) != 0 && S_ISDIR(sb.st_mode))
+	{
+		fprintf(stderr, "Unable to find uksm interface in /sys/kernel/mm/uksm\n");
+		exit(2);
+	}
+	
 	int opts = 0, unshared = 0, shared = 1, kilobytes = 0, megabytes = 1, verbose = 0;
 	while ((opts = getopt(argc, argv, "uskmv")) != -1)
 	{
