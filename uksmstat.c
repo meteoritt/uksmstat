@@ -23,9 +23,9 @@
 #include <sysexits.h>
 
 #define UKSMDIR		"/sys/kernel/mm/uksm"
-#define UKSMRUN		"/sys/kernel/mm/uksm/run"
-#define UKSMUNSHARED	"/sys/kernel/mm/uksm/pages_unshared"
-#define UKSMSHARED	"/sys/kernel/mm/uksm/pages_sharing"
+#define UKSMRUN		UKSMDIR"/run"
+#define UKSMUNSHARED	UKSMDIR"/pages_unshared"
+#define UKSMSHARED	UKSMDIR"/pages_sharing"
 
 void show_help()
 {
