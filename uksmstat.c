@@ -32,11 +32,14 @@ int main(int argc, char **argv)
 	}
 
 	// parse cmdline options
-	int opts = 0, unshared = 0, shared = 1, kilobytes = 0, megabytes = 1, verbose = 0;
-	while ((opts = getopt(argc, argv, "uskmv")) != -1)
+	int opts = 0, active = 0, unshared = 0, shared = 1, kilobytes = 0, megabytes = 1, verbose = 0;
+	while ((opts = getopt(argc, argv, "auskmv")) != -1)
 	{
 		switch (opts)
 		{
+			case 'a':
+				active = 1;
+				break;
 			case 'u':
 				unshared = 1;
 				break;
@@ -57,6 +60,24 @@ int main(int argc, char **argv)
 				exit(1);
 				break;
 		}
+	}
+
+	if (active == 1)
+	{
+		FILE *f = fopen("/sys/kernel/mm/uksm/run", "r");
+		if (f == NULL)
+		{
+			fprintf(stderr, "Unable to open run file\n");
+			exit(5);
+		}
+		int run;
+		fscanf(f, "%d", &run);
+		fclose(f);
+
+		if (run == 1)
+			fprintf(stdout, "UKSM is active\n");
+		else if (run == 0)
+			fprintf(stdout, "UKSM is inactive\n");
 	}
 
 	// find out page size
