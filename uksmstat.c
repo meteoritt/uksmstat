@@ -31,6 +31,7 @@ int main(int argc, char **argv)
 		exit(2);
 	}
 
+	// parse cmdline options
 	int opts = 0, unshared = 0, shared = 1, kilobytes = 0, megabytes = 1, verbose = 0;
 	while ((opts = getopt(argc, argv, "uskmv")) != -1)
 	{
@@ -66,6 +67,7 @@ int main(int argc, char **argv)
 		exit(3);
 	}
 
+	// show unshared mem
 	if (unshared == 1)
 	{
 		FILE *f = fopen("/sys/kernel/mm/uksm/pages_unshared", "r");
@@ -77,6 +79,7 @@ int main(int argc, char **argv)
 		long pages_unshared;
 		fscanf(f, "%ld", &pages_unshared);
 		fclose(f);
+
 		if (verbose == 0)
 		{
 			if (kilobytes == 1)
@@ -97,6 +100,8 @@ int main(int argc, char **argv)
 				fprintf(stdout, "Unshared pages: %ld MiB\n", page_size * pages_unshared / (1024 * 1024));
 		}
 	}
+
+	// show shared (saved) mem
 	if (shared == 1)
 	{
 		FILE *f = fopen("/sys/kernel/mm/uksm/pages_sharing", "r");
@@ -128,6 +133,7 @@ int main(int argc, char **argv)
 				fprintf(stdout, "Shared pages: %ld MiB\n", page_size * pages_shared / (1024 * 1024));
 		}
 	}
+
 	return 0;
 }
 
