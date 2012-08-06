@@ -20,11 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-
-#define EUTINT	1
-#define EUTFILE	2
-#define EUTPAGE	3
-#define EUTOPT	4
+#include <sysexits.h>
 
 #define UKSMDIR		"/sys/kernel/mm/uksm"
 #define UKSMRUN		"/sys/kernel/mm/uksm/run"
@@ -45,7 +41,7 @@ void show_help()
 	fprintf(stdout, "\t-m: use mebibytes\n");
 	fprintf(stdout, "\t-v: be verbose (up to -vv)\n");
 	fprintf(stdout, "\t-h: show this help\n");
-	exit(0);
+	exit(EX_OK);
 }
 
 int main(int argc, char **argv)
@@ -59,7 +55,7 @@ int main(int argc, char **argv)
 	if (0 != stat(UKSMDIR, &sb) && S_ISDIR(sb.st_mode))
 	{
 		fprintf(stderr, "Unable to find uksm interface in %s\n", UKSMDIR);
-		exit(EUTINT);
+		exit(EX_OSFILE);
 	}
 
 	// parse cmdline options
@@ -90,7 +86,7 @@ int main(int argc, char **argv)
 				break;
 			default:
 				fprintf(stderr, "Unknown option: %c\n", opts);
-				exit(EUTOPT);
+				exit(EX_USAGE);
 				break;
 		}
 	}
@@ -101,7 +97,7 @@ int main(int argc, char **argv)
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open run file\n");
-			exit(EUTFILE);
+			exit(EX_OSFILE);
 		}
 		int run;
 		fscanf(f, "%d", &run);
@@ -118,7 +114,7 @@ int main(int argc, char **argv)
 	if (-1 == page_size)
 	{
 		fprintf(stderr, "Unable to get page size\n");
-		exit(EUTPAGE);
+		exit(EX_OSERR);
 	}
 
 	// show unshared mem
@@ -128,7 +124,7 @@ int main(int argc, char **argv)
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open pages_unshared file\n");
-			exit(EUTFILE);
+			exit(EX_OSFILE);
 		}
 		long pages_unshared;
 		fscanf(f, "%ld", &pages_unshared);
@@ -162,7 +158,7 @@ int main(int argc, char **argv)
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open pages_sharing file\n");
-			exit(EUTFILE);
+			exit(EX_OSFILE);
 		}
 		long pages_shared;
 		fscanf(f, "%ld", &pages_shared);
@@ -188,6 +184,6 @@ int main(int argc, char **argv)
 		}
 	}
 
-	return 0;
+	return EX_OK;
 }
 
