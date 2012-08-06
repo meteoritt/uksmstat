@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Unable to find uksm interface in /sys/kernel/mm/uksm\n");
 		exit(2);
 	}
-	
+
 	int opts = 0, unshared = 0, shared = 1, kilobytes = 0, megabytes = 1, verbose = 0;
 	while ((opts = getopt(argc, argv, "uskmv")) != -1)
 	{
@@ -58,7 +58,14 @@ int main(int argc, char **argv)
 		}
 	}
 
+	// find out page size
 	long page_size = sysconf(_SC_PAGESIZE);
+	if (page_size == -1)
+	{
+		fprintf(stderr, "Unable to get page size\n");
+		exit(3);
+	}
+
 	if (unshared == 1)
 	{
 		FILE *f = fopen("/sys/kernel/mm/uksm/pages_unshared", "r");
