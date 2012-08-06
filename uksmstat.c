@@ -21,6 +21,23 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+void show_help()
+{
+	fprintf(stdout, "uksmstat - small tool to show UKSM statistics\n");
+	fprintf(stdout, "© Oleksandr Natalenko aka post-factum, 2012\n");
+	fprintf(stdout, "Distributed under terms and conditions of GPLv3+. See COPYING for details.\n");
+	fprintf(stdout, "Usage: uksmstat <options>\n");
+	fprintf(stdout, "Options:\n");
+	fprintf(stdout, "\t-a: show whether UKSM is active\n");
+	fprintf(stdout, "\t-u: show unshared memory\n");
+	fprintf(stdout, "\t-s: show saved memory\n");
+	fprintf(stdout, "\t-k: use kibibytes\n");
+	fprintf(stdout, "\t-m: use mebibytes\n");
+	fprintf(stdout, "\t-v: be verbose (up to -vv)\n");
+	fprintf(stdout, "\t-h: show this help\n");
+	exit(0);
+}
+
 int main(int argc, char **argv)
 {
 	// check if there's uksm
@@ -33,7 +50,7 @@ int main(int argc, char **argv)
 
 	// parse cmdline options
 	int opts = 0, active = 0, unshared = 0, shared = 0, kilobytes = 0, megabytes = 0, verbose = 0;
-	while ((opts = getopt(argc, argv, "auskmv")) != -1)
+	while ((opts = getopt(argc, argv, "auskmvh")) != -1)
 	{
 		switch (opts)
 		{
@@ -54,6 +71,9 @@ int main(int argc, char **argv)
 				break;
 			case 'v':
 				verbose++;
+				break;
+			case 'h':
+				show_help();
 				break;
 			default:
 				fprintf(stderr, "Unknown option: %c\n", opts);
