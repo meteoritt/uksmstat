@@ -69,6 +69,11 @@ int main(int argc, char **argv)
 	if (unshared == 1)
 	{
 		FILE *f = fopen("/sys/kernel/mm/uksm/pages_unshared", "r");
+		if (f == NULL)
+		{
+			fprintf(stderr, "Unable to open pages_unshared file\n");
+			exit(4);
+		}
 		long pages_unshared;
 		fscanf(f, "%ld", &pages_unshared);
 		fclose(f);
@@ -95,6 +100,11 @@ int main(int argc, char **argv)
 	if (shared == 1)
 	{
 		FILE *f = fopen("/sys/kernel/mm/uksm/pages_sharing", "r");
+		if (f == NULL)
+		{
+			fprintf(stderr, "Unable to open pages_sharing file\n");
+			exit(5);
+		}
 		long pages_shared;
 		fscanf(f, "%ld", &pages_shared);
 		fclose(f);
