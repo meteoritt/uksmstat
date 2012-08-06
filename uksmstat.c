@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 {
 	// check if there's uksm
 	struct stat sb;
-	if (stat("/sys/kernel/mm/uksm", &sb) != 0 && S_ISDIR(sb.st_mode))
+	if (0 != stat("/sys/kernel/mm/uksm", &sb) && S_ISDIR(sb.st_mode))
 	{
 		fprintf(stderr, "Unable to find uksm interface in /sys/kernel/mm/uksm\n");
 		exit(EUTINT);
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
 	// parse cmdline options
 	int opts = 0, active = 0, unshared = 0, shared = 0, kilobytes = 0, megabytes = 0, verbose = 0;
-	while ((opts = getopt(argc, argv, "auskmvh")) != -1)
+	while (-1 != (opts = getopt(argc, argv, "auskmvh")))
 	{
 		switch (opts)
 		{
@@ -87,10 +87,10 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if (active == 1)
+	if (1 == active)
 	{
 		FILE *f = fopen("/sys/kernel/mm/uksm/run", "r");
-		if (f == NULL)
+		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open run file\n");
 			exit(EUTFILE);
@@ -99,25 +99,25 @@ int main(int argc, char **argv)
 		fscanf(f, "%d", &run);
 		fclose(f);
 
-		if (run == 1)
+		if (1 == run)
 			fprintf(stdout, "UKSM is active\n");
-		else if (run == 0)
+		else if (0 == run)
 			fprintf(stdout, "UKSM is inactive\n");
 	}
 
 	// find out page size
 	long page_size = sysconf(_SC_PAGESIZE);
-	if (page_size == -1)
+	if (-1 == page_size)
 	{
 		fprintf(stderr, "Unable to get page size\n");
 		exit(EUTPAGE);
 	}
 
 	// show unshared mem
-	if (unshared == 1)
+	if (1 == unshared)
 	{
 		FILE *f = fopen("/sys/kernel/mm/uksm/pages_unshared", "r");
-		if (f == NULL)
+		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open pages_unshared file\n");
 			exit(EUTFILE);
@@ -126,32 +126,32 @@ int main(int argc, char **argv)
 		fscanf(f, "%ld", &pages_unshared);
 		fclose(f);
 
-		if (verbose == 0)
+		if (0 == verbose)
 		{
-			if (kilobytes == 1)
+			if (1 == kilobytes)
 				fprintf(stdout, "%ld\n", page_size * pages_unshared / 1024);
-			else if (megabytes == 1)
+			else if (1 == megabytes)
 				fprintf(stdout, "%ld\n", page_size * pages_unshared / (1024 * 1024));
-		} else if (verbose == 1)
+		} else if (1 == verbose)
 		{
-			if (kilobytes == 1)
+			if (1 == kilobytes)
 				fprintf(stdout, "%ld KiB\n", page_size * pages_unshared / 1024);
-			else if (megabytes == 1)
+			else if (1 == megabytes)
 				fprintf(stdout, "%ld MiB\n", page_size * pages_unshared / (1024 * 1024));
-		} else if (verbose == 2)
+		} else if (2 == verbose)
 		{
-			if (kilobytes == 1)
+			if (1 == kilobytes)
 				fprintf(stdout, "Unshared pages: %ld KiB\n", page_size * pages_unshared / 1024);
-			else if (megabytes == 1)
+			else if (1 == megabytes)
 				fprintf(stdout, "Unshared pages: %ld MiB\n", page_size * pages_unshared / (1024 * 1024));
 		}
 	}
 
 	// show shared (saved) mem
-	if (shared == 1)
+	if (1 == shared)
 	{
 		FILE *f = fopen("/sys/kernel/mm/uksm/pages_sharing", "r");
-		if (f == NULL)
+		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open pages_sharing file\n");
 			exit(EUTFILE);
@@ -159,23 +159,23 @@ int main(int argc, char **argv)
 		long pages_shared;
 		fscanf(f, "%ld", &pages_shared);
 		fclose(f);
-		if (verbose == 0)
+		if (0 == verbose)
 		{
-			if (kilobytes == 1)
+			if (1 == kilobytes)
 				fprintf(stdout, "%ld\n", page_size * pages_shared / 1024);
-			else if (megabytes == 1)
+			else if (1 == megabytes)
 				fprintf(stdout, "%ld\n", page_size * pages_shared / (1024 * 1024));
-		} else if (verbose == 1)
+		} else if (1 == verbose)
 		{
-			if (kilobytes == 1)
+			if (1 == kilobytes)
 				fprintf(stdout, "%ld KiB\n", page_size * pages_shared / 1024);
-			else if (megabytes == 1)
+			else if (1 == megabytes)
 				fprintf(stdout, "%ld MiB\n", page_size * pages_shared / (1024 * 1024));
-		} else if (verbose == 2)
+		} else if (2 == verbose)
 		{
-			if (kilobytes == 1)
+			if (1 == kilobytes)
 				fprintf(stdout, "Shared pages: %ld KiB\n", page_size * pages_shared / 1024);
-			else if (megabytes == 1)
+			else if (1 == megabytes)
 				fprintf(stdout, "Shared pages: %ld MiB\n", page_size * pages_shared / (1024 * 1024));
 		}
 	}
