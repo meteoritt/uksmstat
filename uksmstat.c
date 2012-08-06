@@ -26,6 +26,11 @@
 #define EUTPAGE	3
 #define EUTOPT	4
 
+#define UKSMDIR		"/sys/kernel/mm/uksm"
+#define UKSMRUN		"/sys/kernel/mm/uksm/run"
+#define UKSMUNSHARED	"/sys/kernel/mm/uksm/pages_unshared"
+#define UKSMSHARED	"/sys/kernel/mm/uksm/pages_sharing"
+
 void show_help()
 {
 	fprintf(stdout, "uksmstat - small tool to show UKSM statistics\n");
@@ -51,9 +56,9 @@ int main(int argc, char **argv)
 	FILE *f;
 
 	// check if there's uksm
-	if (0 != stat("/sys/kernel/mm/uksm", &sb) && S_ISDIR(sb.st_mode))
+	if (0 != stat(UKSMDIR, &sb) && S_ISDIR(sb.st_mode))
 	{
-		fprintf(stderr, "Unable to find uksm interface in /sys/kernel/mm/uksm\n");
+		fprintf(stderr, "Unable to find uksm interface in %s\n", UKSMDIR);
 		exit(EUTINT);
 	}
 
@@ -92,7 +97,7 @@ int main(int argc, char **argv)
 
 	if (1 == active)
 	{
-		f = fopen("/sys/kernel/mm/uksm/run", "r");
+		f = fopen(UKSMRUN, "r");
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open run file\n");
@@ -119,7 +124,7 @@ int main(int argc, char **argv)
 	// show unshared mem
 	if (1 == unshared)
 	{
-		f = fopen("/sys/kernel/mm/uksm/pages_unshared", "r");
+		f = fopen(UKSMUNSHARED, "r");
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open pages_unshared file\n");
@@ -153,7 +158,7 @@ int main(int argc, char **argv)
 	// show shared (saved) mem
 	if (1 == shared)
 	{
-		f = fopen("/sys/kernel/mm/uksm/pages_sharing", "r");
+		f = fopen(UKSMSHARED, "r");
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open pages_sharing file\n");
