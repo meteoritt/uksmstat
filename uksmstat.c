@@ -45,8 +45,12 @@ void show_help()
 
 int main(int argc, char **argv)
 {
-	// check if there's uksm
+	// define vars
+	int opts = 0, active = 0, unshared = 0, shared = 0, kilobytes = 0, megabytes = 0, verbose = 0;
 	struct stat sb;
+	FILE *f;
+
+	// check if there's uksm
 	if (0 != stat("/sys/kernel/mm/uksm", &sb) && S_ISDIR(sb.st_mode))
 	{
 		fprintf(stderr, "Unable to find uksm interface in /sys/kernel/mm/uksm\n");
@@ -54,7 +58,6 @@ int main(int argc, char **argv)
 	}
 
 	// parse cmdline options
-	int opts = 0, active = 0, unshared = 0, shared = 0, kilobytes = 0, megabytes = 0, verbose = 0;
 	while (-1 != (opts = getopt(argc, argv, "auskmvh")))
 	{
 		switch (opts)
@@ -89,7 +92,7 @@ int main(int argc, char **argv)
 
 	if (1 == active)
 	{
-		FILE *f = fopen("/sys/kernel/mm/uksm/run", "r");
+		f = fopen("/sys/kernel/mm/uksm/run", "r");
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open run file\n");
@@ -116,7 +119,7 @@ int main(int argc, char **argv)
 	// show unshared mem
 	if (1 == unshared)
 	{
-		FILE *f = fopen("/sys/kernel/mm/uksm/pages_unshared", "r");
+		f = fopen("/sys/kernel/mm/uksm/pages_unshared", "r");
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open pages_unshared file\n");
@@ -150,7 +153,7 @@ int main(int argc, char **argv)
 	// show shared (saved) mem
 	if (1 == shared)
 	{
-		FILE *f = fopen("/sys/kernel/mm/uksm/pages_sharing", "r");
+		f = fopen("/sys/kernel/mm/uksm/pages_sharing", "r");
 		if (NULL == f)
 		{
 			fprintf(stderr, "Unable to open pages_sharing file\n");
