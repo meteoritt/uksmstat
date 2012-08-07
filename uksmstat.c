@@ -132,27 +132,27 @@ int main(int argc, char **argv)
 			exit(EX_OSFILE);
 		}
 		unsigned long long pages_unshared;
-		fscanf(f, "%lld", &pages_unshared);
+		fscanf(f, "%llu", &pages_unshared);
 		fclose(f);
 
 		if (0 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%lld\n", page_size * pages_unshared / 1024);
+				fprintf(stdout, "%llu\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%lld\n", page_size * pages_unshared / (1024 * 1024));
+				fprintf(stdout, "%llu\n", page_size * pages_unshared / (1024 * 1024));
 		} else if (1 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%lld KiB\n", page_size * pages_unshared / 1024);
+				fprintf(stdout, "%llu KiB\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%lld MiB\n", page_size * pages_unshared / (1024 * 1024));
+				fprintf(stdout, "%llu MiB\n", page_size * pages_unshared / (1024 * 1024));
 		} else if (2 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "Unshared pages: %lld KiB\n", page_size * pages_unshared / 1024);
+				fprintf(stdout, "Unshared pages: %llu KiB\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "Unshared pages: %lld MiB\n", page_size * pages_unshared / (1024 * 1024));
+				fprintf(stdout, "Unshared pages: %llu MiB\n", page_size * pages_unshared / (1024 * 1024));
 		}
 	}
 
@@ -166,26 +166,26 @@ int main(int argc, char **argv)
 			exit(EX_OSFILE);
 		}
 		unsigned long long pages_shared;
-		fscanf(f, "%lld", &pages_shared);
+		fscanf(f, "%llu", &pages_shared);
 		fclose(f);
 		if (0 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%lld\n", page_size * pages_shared / 1024);
+				fprintf(stdout, "%llu\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%lld\n", page_size * pages_shared / (1024 * 1024));
+				fprintf(stdout, "%llu\n", page_size * pages_shared / (1024 * 1024));
 		} else if (1 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%lld KiB\n", page_size * pages_shared / 1024);
+				fprintf(stdout, "%llu KiB\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%lld MiB\n", page_size * pages_shared / (1024 * 1024));
+				fprintf(stdout, "%llu MiB\n", page_size * pages_shared / (1024 * 1024));
 		} else if (2 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "Shared pages: %lld KiB\n", page_size * pages_shared / 1024);
+				fprintf(stdout, "Shared pages: %llu KiB\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "Shared pages: %lld MiB\n", page_size * pages_shared / (1024 * 1024));
+				fprintf(stdout, "Shared pages: %llu MiB\n", page_size * pages_shared / (1024 * 1024));
 		}
 	}
 
@@ -199,27 +199,27 @@ int main(int argc, char **argv)
 			exit(EX_OSFILE);
 		}
 		unsigned long long pages_scanned;
-		fscanf(f, "%lld", &pages_scanned);
+		fscanf(f, "%llu", &pages_scanned);
 		fclose(f);
 		if (0 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%lld\n", page_size * pages_scanned / 1024);
+				fprintf(stdout, "%llu\n", page_size * pages_scanned / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%lld\n", page_size * pages_scanned / (1024 * 1024));
+				fprintf(stdout, "%llu\n", page_size * pages_scanned / (1024 * 1024));
 		} else if (1 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%lld KiB\n", page_size * pages_scanned / 1024);
+				fprintf(stdout, "%llu KiB\n", page_size * pages_scanned / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%lld MiB\n", page_size * pages_scanned / (1024 * 1024));
+				fprintf(stdout, "%llu MiB\n", page_size * pages_scanned / (1024 * 1024));
 		} else if (2 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "Scanned pages: %lld KiB\n", page_size * pages_scanned / 1024);
+				fprintf(stdout, "Scanned pages: %llu KiB\n", page_size * pages_scanned / 1024);
 			else if (1 == megabytes)
 			{
-				fprintf(stdout, "Scanned pages: %lld MiB\n", page_size * pages_scanned / (1024 * 1024));
+				fprintf(stdout, "Scanned pages: %llu MiB\n", page_size * pages_scanned / (1024 * 1024));
 			}
 		}
 	}
