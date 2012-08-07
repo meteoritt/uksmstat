@@ -41,6 +41,7 @@ void show_help()
 	fprintf(stdout, "\t-c: show scanned memory\n");
 	fprintf(stdout, "\t-k: use kibibytes\n");
 	fprintf(stdout, "\t-m: use mebibytes\n");
+	fprintf(stdout, "\t-g: use gibibytes\n");
 	fprintf(stdout, "\t-v: be verbose (up to -vv)\n");
 	fprintf(stdout, "\t-h: show this help\n");
 	exit(EX_OK);
@@ -49,7 +50,7 @@ void show_help()
 int main(int argc, char **argv)
 {
 	// define vars
-	int opts = 0, active = 0, unshared = 0, shared = 0, scanned = 0, kilobytes = 0, megabytes = 0, verbose = 0;
+	int opts = 0, active = 0, unshared = 0, shared = 0, scanned = 0, kilobytes = 0, megabytes = 0, gigabytes = 0, verbose = 0;
 	struct stat sb;
 	FILE *f;
 
@@ -61,7 +62,7 @@ int main(int argc, char **argv)
 	}
 
 	// parse cmdline options
-	while (-1 != (opts = getopt(argc, argv, "ausckmvh")))
+	while (-1 != (opts = getopt(argc, argv, "ausckmgvh")))
 	{
 		switch (opts)
 		{
@@ -82,6 +83,9 @@ int main(int argc, char **argv)
 				break;
 			case 'm':
 				megabytes = 1;
+				break;
+			case 'g':
+				gigabytes = 1;
 				break;
 			case 'v':
 				verbose++;
@@ -141,18 +145,24 @@ int main(int argc, char **argv)
 				fprintf(stdout, "%llu\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "%llu\n", page_size * pages_unshared / (1024 * 1024));
+			else if (1 == gigabytes)
+				fprintf(stdout, "%llu\n", page_size * pages_unshared / (1024 * 1024 * 1024));
 		} else if (1 == verbose)
 		{
 			if (1 == kilobytes)
 				fprintf(stdout, "%llu KiB\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "%llu MiB\n", page_size * pages_unshared / (1024 * 1024));
+			else if (1 == gigabytes)
+				fprintf(stdout, "%llu GiB\n", page_size * pages_unshared / (1024 * 1024 * 1024));
 		} else if (2 == verbose)
 		{
 			if (1 == kilobytes)
 				fprintf(stdout, "Unshared pages: %llu KiB\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "Unshared pages: %llu MiB\n", page_size * pages_unshared / (1024 * 1024));
+			else if (1 == gigabytes)
+				fprintf(stdout, "Unshared pages: %llu GiB\n", page_size * pages_unshared / (1024 * 1024 * 1024));
 		}
 	}
 
@@ -174,18 +184,24 @@ int main(int argc, char **argv)
 				fprintf(stdout, "%llu\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "%llu\n", page_size * pages_shared / (1024 * 1024));
+			else if (1 == gigabytes)
+				fprintf(stdout, "%llu\n", page_size * pages_shared / (1024 * 1024 * 1024));
 		} else if (1 == verbose)
 		{
 			if (1 == kilobytes)
 				fprintf(stdout, "%llu KiB\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "%llu MiB\n", page_size * pages_shared / (1024 * 1024));
+			else if (1 == gigabytes)
+				fprintf(stdout, "%llu GiB\n", page_size * pages_shared / (1024 * 1024 * 1024));
 		} else if (2 == verbose)
 		{
 			if (1 == kilobytes)
 				fprintf(stdout, "Shared pages: %llu KiB\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "Shared pages: %llu MiB\n", page_size * pages_shared / (1024 * 1024));
+			else if (1 == gigabytes)
+				fprintf(stdout, "Shared pages: %llu GiB\n", page_size * pages_shared / (1024 * 1024 * 1024));
 		}
 	}
 
@@ -207,20 +223,24 @@ int main(int argc, char **argv)
 				fprintf(stdout, "%llu\n", page_size * pages_scanned / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "%llu\n", page_size * pages_scanned / (1024 * 1024));
+			else if (1 == gigabytes)
+				fprintf(stdout, "%llu\n", page_size * pages_scanned / (1024 * 1024 * 1024));
 		} else if (1 == verbose)
 		{
 			if (1 == kilobytes)
 				fprintf(stdout, "%llu KiB\n", page_size * pages_scanned / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "%llu MiB\n", page_size * pages_scanned / (1024 * 1024));
+			else if (1 == gigabytes)
+				fprintf(stdout, "%llu GiB\n", page_size * pages_scanned / (1024 * 1024 * 1024));
 		} else if (2 == verbose)
 		{
 			if (1 == kilobytes)
 				fprintf(stdout, "Scanned pages: %llu KiB\n", page_size * pages_scanned / 1024);
 			else if (1 == megabytes)
-			{
 				fprintf(stdout, "Scanned pages: %llu MiB\n", page_size * pages_scanned / (1024 * 1024));
-			}
+			else if (1 == gigabytes)
+				fprintf(stdout, "Scanned pages: %llu GiB\n", page_size * pages_scanned / (1024 * 1024 * 1024));
 		}
 	}
 
