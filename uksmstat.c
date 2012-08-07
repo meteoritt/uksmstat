@@ -153,12 +153,18 @@ int main(int argc, char **argv)
 		fscanf(f, "%llu", &pages_unshared);
 		fclose(f);
 
-		if (0 == verbose)
-			fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_unshared / divisor);
-		else if (1 == verbose)
-			fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_unshared / divisor, units);
-		else if (2 == verbose)
-			fprintf(stdout, "Unshared pages: %1.*lf %s\n", precision, (double)page_size * pages_unshared / divisor, units);
+		switch (verbose)
+		{
+			case 0:
+				fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_unshared / divisor);
+				break;
+			case 1:
+				fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_unshared / divisor, units);
+				break;
+			case 2:
+				fprintf(stdout, "Unshared pages: %1.*lf %s\n", precision, (double)page_size * pages_unshared / divisor, units);
+				break;
+		}
 	}
 
 	// show shared (saved) mem
@@ -173,12 +179,18 @@ int main(int argc, char **argv)
 		unsigned long long pages_shared;
 		fscanf(f, "%llu", &pages_shared);
 		fclose(f);
-		if (0 == verbose)
-			fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_shared / divisor);
-		else if (1 == verbose)
-			fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_shared / divisor, units);
-		else if (2 == verbose)
-			fprintf(stdout, "Shared pages: %1.*lf %s\n", precision, (double)page_size * pages_shared / divisor, units);
+		switch (verbose)
+		{
+			case 0:
+				fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_shared / divisor);
+				break;
+			case 1:
+				fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_shared / divisor, units);
+				break;
+			case 2:
+				fprintf(stdout, "Shared pages: %1.*lf %s\n", precision, (double)page_size * pages_shared / divisor, units);
+				break;
+		}
 	}
 
 	// show scanned (total during kernel uptime) mem
@@ -193,12 +205,18 @@ int main(int argc, char **argv)
 		unsigned long long pages_scanned;
 		fscanf(f, "%llu", &pages_scanned);
 		fclose(f);
-		if (0 == verbose)
-			fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_scanned / divisor);
-		else if (1 == verbose)
-			fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_scanned / divisor, units);
-		else if (2 == verbose)
-			fprintf(stdout, "Scanned pages: %1.*lf %s\n", precision, (double)page_size * pages_scanned / divisor, units);
+		switch (verbose)
+		{
+			case 0:
+				fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_scanned / divisor);
+				break;
+			case 1:
+				fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_scanned / divisor, units);
+				break;
+			case 2:
+				fprintf(stdout, "Scanned pages: %1.*lf %s\n", precision, (double)page_size * pages_scanned / divisor, units);
+				break;
+		}
 	}
 
 	return EX_OK;
