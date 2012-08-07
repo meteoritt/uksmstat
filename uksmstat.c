@@ -50,7 +50,9 @@ void show_help()
 int main(int argc, char **argv)
 {
 	// define vars
-	int opts = 0, active = 0, unshared = 0, shared = 0, scanned = 0, kilobytes = 0, megabytes = 0, gigabytes = 0, verbose = 0;
+	int opts = 0, active = 0, unshared = 0, shared = 0, scanned = 0, verbose = 0;
+	char *units;
+	unsigned long divisor = 0;
 	struct stat sb;
 	FILE *f;
 
@@ -79,13 +81,16 @@ int main(int argc, char **argv)
 				scanned = 1;
 				break;
 			case 'k':
-				kilobytes = 1;
+				units = "KiB";
+				divisor = 1024;
 				break;
 			case 'm':
-				megabytes = 1;
+				units = "MiB";
+				divisor = 1024 * 1024;
 				break;
 			case 'g':
-				gigabytes = 1;
+				units = "GiB";
+				divisor = 1024 * 1024 * 1024;
 				break;
 			case 'v':
 				verbose++;
@@ -140,30 +145,11 @@ int main(int argc, char **argv)
 		fclose(f);
 
 		if (0 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_unshared / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_unshared / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_unshared / (1024 * 1024 * 1024));
-		} else if (1 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "%1.3lf KiB\n", (double)page_size * pages_unshared / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "%1.3lf MiB\n", (double)page_size * pages_unshared / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "%1.3lf GiB\n", (double)page_size * pages_unshared / (1024 * 1024 * 1024));
-		} else if (2 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "Unshared pages: %1.3lf KiB\n", (double)page_size * pages_unshared / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "Unshared pages: %1.3lf MiB\n", (double)page_size * pages_unshared / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "Unshared pages: %1.3lf GiB\n", (double)page_size * pages_unshared / (1024 * 1024 * 1024));
-		}
+			fprintf(stdout, "%1.3lf\n", (double)page_size * pages_unshared / divisor);
+		else if (1 == verbose)
+			fprintf(stdout, "%1.3lf %s\n", (double)page_size * pages_unshared / divisor, units);
+		else if (2 == verbose)
+			fprintf(stdout, "Unshared pages: %1.3lf %s\n", (double)page_size * pages_unshared / divisor, units);
 	}
 
 	// show shared (saved) mem
@@ -179,30 +165,11 @@ int main(int argc, char **argv)
 		fscanf(f, "%llu", &pages_shared);
 		fclose(f);
 		if (0 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_shared / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_shared / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_shared / (1024 * 1024 * 1024));
-		} else if (1 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "%1.3lf KiB\n", (double)page_size * pages_shared / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "%1.3lf MiB\n", (double)page_size * pages_shared / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "%1.3lf GiB\n", (double)page_size * pages_shared / (1024 * 1024 * 1024));
-		} else if (2 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "Shared pages: %1.3lf KiB\n", (double)page_size * pages_shared / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "Shared pages: %1.3lf MiB\n", (double)page_size * pages_shared / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "Shared pages: %1.3lf GiB\n", (double)page_size * pages_shared / (1024 * 1024 * 1024));
-		}
+			fprintf(stdout, "%1.3lf\n", (double)page_size * pages_shared / divisor);
+		else if (1 == verbose)
+			fprintf(stdout, "%1.3lf %s\n", (double)page_size * pages_shared / divisor, units);
+		else if (2 == verbose)
+			fprintf(stdout, "Shared pages: %1.3lf %s\n", (double)page_size * pages_shared / divisor, units);
 	}
 
 	// show scanned (total during kernel uptime) mem
@@ -218,30 +185,11 @@ int main(int argc, char **argv)
 		fscanf(f, "%llu", &pages_scanned);
 		fclose(f);
 		if (0 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_scanned / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_scanned / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "%1.3lf\n", (double)page_size * pages_scanned / (1024 * 1024 * 1024));
-		} else if (1 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "%1.3lf KiB\n", (double)page_size * pages_scanned / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "%1.3lf MiB\n", (double)page_size * pages_scanned / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "%1.3lf GiB\n", (double)page_size * pages_scanned / (1024 * 1024 * 1024));
-		} else if (2 == verbose)
-		{
-			if (1 == kilobytes)
-				fprintf(stdout, "Scanned pages: %1.3lf KiB\n", (double)page_size * pages_scanned / 1024);
-			else if (1 == megabytes)
-				fprintf(stdout, "Scanned pages: %1.3lf MiB\n", (double)page_size * pages_scanned / (1024 * 1024));
-			else if (1 == gigabytes)
-				fprintf(stdout, "Scanned pages: %1.3lf GiB\n", (double)page_size * pages_scanned / (1024 * 1024 * 1024));
-		}
+			fprintf(stdout, "%1.3lf\n", (double)page_size * pages_scanned / divisor);
+		else if (1 == verbose)
+			fprintf(stdout, "%1.3lf %s\n", (double)page_size * pages_scanned / divisor, units);
+		else if (2 == verbose)
+			fprintf(stdout, "Scanned pages: %1.3lf %s\n", (double)page_size * pages_scanned / divisor, units);
 	}
 
 	return EX_OK;
