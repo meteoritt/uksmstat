@@ -1,3 +1,5 @@
+// vim: ts=3:filetype=c
+
 /*
     uksmstat — small tool to show UKSM statistics
     Copyright © 2012 Oleksandr Natalenko aka post-factum <pfactum@gmail.com>
