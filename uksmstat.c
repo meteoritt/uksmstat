@@ -113,6 +113,7 @@ int main(int argc, char **argv)
 	if (0 == precision)
 		precision = 2;
 
+	// check if UKSM is active
 	if (1 == active)
 	{
 		f = fopen(UKSMRUN, "r");
