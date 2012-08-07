@@ -26,6 +26,7 @@
 #define UKSMRUN		UKSMDIR"/run"
 #define UKSMUNSHARED	UKSMDIR"/pages_unshared"
 #define UKSMSHARED	UKSMDIR"/pages_sharing"
+#define UKSMSCANNED	UKSMDIR"/pages_scanned"
 
 void show_help()
 {
@@ -37,6 +38,7 @@ void show_help()
 	fprintf(stdout, "\t-a: show whether UKSM is active\n");
 	fprintf(stdout, "\t-u: show unshared memory\n");
 	fprintf(stdout, "\t-s: show saved memory\n");
+	fprintf(stdout, "\t-c: show scanned memory\n");
 	fprintf(stdout, "\t-k: use kibibytes\n");
 	fprintf(stdout, "\t-m: use mebibytes\n");
 	fprintf(stdout, "\t-v: be verbose (up to -vv)\n");
@@ -47,7 +49,7 @@ void show_help()
 int main(int argc, char **argv)
 {
 	// define vars
-	int opts = 0, active = 0, unshared = 0, shared = 0, kilobytes = 0, megabytes = 0, verbose = 0;
+	int opts = 0, active = 0, unshared = 0, shared = 0, scanned = 0, kilobytes = 0, megabytes = 0, verbose = 0;
 	struct stat sb;
 	FILE *f;
 
@@ -59,7 +61,7 @@ int main(int argc, char **argv)
 	}
 
 	// parse cmdline options
-	while (-1 != (opts = getopt(argc, argv, "auskmvh")))
+	while (-1 != (opts = getopt(argc, argv, "ausckmvh")))
 	{
 		switch (opts)
 		{
@@ -71,6 +73,9 @@ int main(int argc, char **argv)
 				break;
 			case 's':
 				shared = 1;
+				break;
+			case 'c':
+				scanned = 1;
 				break;
 			case 'k':
 				kilobytes = 1;
@@ -181,6 +186,41 @@ int main(int argc, char **argv)
 				fprintf(stdout, "Shared pages: %ld KiB\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
 				fprintf(stdout, "Shared pages: %ld MiB\n", page_size * pages_shared / (1024 * 1024));
+		}
+	}
+
+	// show scanned (total during kernel uptime) mem
+	if (1 == scanned)
+	{
+		f = fopen(UKSMSCANNED, "r");
+		if (NULL == f)
+		{
+			fprintf(stderr, "Unable to open pages_scanned file\n");
+			exit(EX_OSFILE);
+		}
+		long long pages_scanned;
+		fscanf(f, "%lld", &pages_scanned);
+		fclose(f);
+		if (0 == verbose)
+		{
+			if (1 == kilobytes)
+				fprintf(stdout, "%lld\n", page_size * pages_scanned / 1024);
+			else if (1 == megabytes)
+				fprintf(stdout, "%lld\n", page_size * pages_scanned / (1024 * 1024));
+		} else if (1 == verbose)
+		{
+			if (1 == kilobytes)
+				fprintf(stdout, "%lld KiB\n", page_size * pages_scanned / 1024);
+			else if (1 == megabytes)
+				fprintf(stdout, "%lld MiB\n", page_size * pages_scanned / (1024 * 1024));
+		} else if (2 == verbose)
+		{
+			if (1 == kilobytes)
+				fprintf(stdout, "Scanned pages: %lld KiB\n", page_size * pages_scanned / 1024);
+			else if (1 == megabytes)
+			{
+				fprintf(stdout, "Scanned pages: %lld MiB\n", page_size * pages_scanned / (1024 * 1024));
+			}
 		}
 	}
 
