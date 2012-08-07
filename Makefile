@@ -2,7 +2,7 @@ PROG = uksmstat
 OBJ = uksmstat.o
 PREFIX ?= /usr/local
 CC ?= cc
-CFLAGS = -O3 -std=c99 -W -Wall -pedantic -D_GNU_SOURCE
+CFLAGS ?= -O3 -std=c99 -W -Wall -pedantic -D_GNU_SOURCE
 LDADD ?= 
 
 all: build
