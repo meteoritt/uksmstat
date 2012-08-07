@@ -42,6 +42,7 @@ void show_help()
 	fprintf(stdout, "\t-k: use kibibytes\n");
 	fprintf(stdout, "\t-m: use mebibytes\n");
 	fprintf(stdout, "\t-g: use gibibytes\n");
+	fprintf(stdout, "\t-p: increase precision (specify -pppp… for better precision)\n");
 	fprintf(stdout, "\t-v: be verbose (up to -vv)\n");
 	fprintf(stdout, "\t-h: show this help\n");
 	exit(EX_OK);
@@ -50,7 +51,7 @@ void show_help()
 int main(int argc, char **argv)
 {
 	// define vars
-	int opts = 0, active = 0, unshared = 0, shared = 0, scanned = 0, verbose = 0;
+	int opts = 0, active = 0, unshared = 0, shared = 0, scanned = 0, verbose = 0, precision = 0;
 	char *units;
 	unsigned long divisor = 0;
 	struct stat sb;
@@ -64,7 +65,7 @@ int main(int argc, char **argv)
 	}
 
 	// parse cmdline options
-	while (-1 != (opts = getopt(argc, argv, "ausckmgvh")))
+	while (-1 != (opts = getopt(argc, argv, "ausckmgpvh")))
 	{
 		switch (opts)
 		{
@@ -92,6 +93,9 @@ int main(int argc, char **argv)
 				units = "GiB";
 				divisor = 1024 * 1024 * 1024;
 				break;
+			case 'p':
+				precision++;
+				break;
 			case 'v':
 				verbose++;
 				break;
@@ -104,6 +108,10 @@ int main(int argc, char **argv)
 				break;
 		}
 	}
+
+	// handle default precision
+	if (0 == precision)
+		precision = 2;
 
 	if (1 == active)
 	{
@@ -145,11 +153,11 @@ int main(int argc, char **argv)
 		fclose(f);
 
 		if (0 == verbose)
-			fprintf(stdout, "%1.3lf\n", (double)page_size * pages_unshared / divisor);
+			fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_unshared / divisor);
 		else if (1 == verbose)
-			fprintf(stdout, "%1.3lf %s\n", (double)page_size * pages_unshared / divisor, units);
+			fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_unshared / divisor, units);
 		else if (2 == verbose)
-			fprintf(stdout, "Unshared pages: %1.3lf %s\n", (double)page_size * pages_unshared / divisor, units);
+			fprintf(stdout, "Unshared pages: %1.*lf %s\n", precision, (double)page_size * pages_unshared / divisor, units);
 	}
 
 	// show shared (saved) mem
@@ -165,11 +173,11 @@ int main(int argc, char **argv)
 		fscanf(f, "%llu", &pages_shared);
 		fclose(f);
 		if (0 == verbose)
-			fprintf(stdout, "%1.3lf\n", (double)page_size * pages_shared / divisor);
+			fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_shared / divisor);
 		else if (1 == verbose)
-			fprintf(stdout, "%1.3lf %s\n", (double)page_size * pages_shared / divisor, units);
+			fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_shared / divisor, units);
 		else if (2 == verbose)
-			fprintf(stdout, "Shared pages: %1.3lf %s\n", (double)page_size * pages_shared / divisor, units);
+			fprintf(stdout, "Shared pages: %1.*lf %s\n", precision, (double)page_size * pages_shared / divisor, units);
 	}
 
 	// show scanned (total during kernel uptime) mem
@@ -185,11 +193,11 @@ int main(int argc, char **argv)
 		fscanf(f, "%llu", &pages_scanned);
 		fclose(f);
 		if (0 == verbose)
-			fprintf(stdout, "%1.3lf\n", (double)page_size * pages_scanned / divisor);
+			fprintf(stdout, "%1.*lf\n", precision, (double)page_size * pages_scanned / divisor);
 		else if (1 == verbose)
-			fprintf(stdout, "%1.3lf %s\n", (double)page_size * pages_scanned / divisor, units);
+			fprintf(stdout, "%1.*lf %s\n", precision, (double)page_size * pages_scanned / divisor, units);
 		else if (2 == verbose)
-			fprintf(stdout, "Scanned pages: %1.3lf %s\n", (double)page_size * pages_scanned / divisor, units);
+			fprintf(stdout, "Scanned pages: %1.*lf %s\n", precision, (double)page_size * pages_scanned / divisor, units);
 	}
 
 	return EX_OK;
