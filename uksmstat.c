@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 	}
 
 	// find out page size
-	long page_size = sysconf(_SC_PAGESIZE);
+	unsigned int page_size = sysconf(_SC_PAGESIZE);
 	if (-1 == page_size)
 	{
 		fprintf(stderr, "Unable to get page size\n");
@@ -131,28 +131,28 @@ int main(int argc, char **argv)
 			fprintf(stderr, "Unable to open pages_unshared file\n");
 			exit(EX_OSFILE);
 		}
-		long pages_unshared;
-		fscanf(f, "%ld", &pages_unshared);
+		unsigned long long pages_unshared;
+		fscanf(f, "%lld", &pages_unshared);
 		fclose(f);
 
 		if (0 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%ld\n", page_size * pages_unshared / 1024);
+				fprintf(stdout, "%lld\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%ld\n", page_size * pages_unshared / (1024 * 1024));
+				fprintf(stdout, "%lld\n", page_size * pages_unshared / (1024 * 1024));
 		} else if (1 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%ld KiB\n", page_size * pages_unshared / 1024);
+				fprintf(stdout, "%lld KiB\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%ld MiB\n", page_size * pages_unshared / (1024 * 1024));
+				fprintf(stdout, "%lld MiB\n", page_size * pages_unshared / (1024 * 1024));
 		} else if (2 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "Unshared pages: %ld KiB\n", page_size * pages_unshared / 1024);
+				fprintf(stdout, "Unshared pages: %lld KiB\n", page_size * pages_unshared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "Unshared pages: %ld MiB\n", page_size * pages_unshared / (1024 * 1024));
+				fprintf(stdout, "Unshared pages: %lld MiB\n", page_size * pages_unshared / (1024 * 1024));
 		}
 	}
 
@@ -165,27 +165,27 @@ int main(int argc, char **argv)
 			fprintf(stderr, "Unable to open pages_sharing file\n");
 			exit(EX_OSFILE);
 		}
-		long pages_shared;
-		fscanf(f, "%ld", &pages_shared);
+		unsigned long long pages_shared;
+		fscanf(f, "%lld", &pages_shared);
 		fclose(f);
 		if (0 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%ld\n", page_size * pages_shared / 1024);
+				fprintf(stdout, "%lld\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%ld\n", page_size * pages_shared / (1024 * 1024));
+				fprintf(stdout, "%lld\n", page_size * pages_shared / (1024 * 1024));
 		} else if (1 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "%ld KiB\n", page_size * pages_shared / 1024);
+				fprintf(stdout, "%lld KiB\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "%ld MiB\n", page_size * pages_shared / (1024 * 1024));
+				fprintf(stdout, "%lld MiB\n", page_size * pages_shared / (1024 * 1024));
 		} else if (2 == verbose)
 		{
 			if (1 == kilobytes)
-				fprintf(stdout, "Shared pages: %ld KiB\n", page_size * pages_shared / 1024);
+				fprintf(stdout, "Shared pages: %lld KiB\n", page_size * pages_shared / 1024);
 			else if (1 == megabytes)
-				fprintf(stdout, "Shared pages: %ld MiB\n", page_size * pages_shared / (1024 * 1024));
+				fprintf(stdout, "Shared pages: %lld MiB\n", page_size * pages_shared / (1024 * 1024));
 		}
 	}
 
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 			fprintf(stderr, "Unable to open pages_scanned file\n");
 			exit(EX_OSFILE);
 		}
-		long long pages_scanned;
+		unsigned long long pages_scanned;
 		fscanf(f, "%lld", &pages_scanned);
 		fclose(f);
 		if (0 == verbose)
