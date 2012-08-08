@@ -100,6 +100,11 @@ int main(int argc, char **argv)
 				break;
 			case 'v':
 				verbose++;
+				if (verbose > 2)
+				{
+						  fprintf(stderr, "Invalid -v switches count\n");
+						  exit(EX_USAGE);
+				}
 				break;
 			case 'h':
 				show_help();
