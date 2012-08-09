@@ -16,7 +16,7 @@ $(PROG): $(OBJ)
 	$(CC) $(CFLAGS) -c $<
 
 install:
-	install -Dm 0755 uksmstat $(DESTDIR)$(PREFIX)/bin/uksmstat
+	install -Dm 0755 $(PROG) $(DESTDIR)$(PREFIX)/bin/$(PROG)
 
 clean:
 	rm -f $(OBJ) $(PROG)
