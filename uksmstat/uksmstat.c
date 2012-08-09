@@ -114,10 +114,6 @@ int main(int argc, char **argv)
 		}
 	}
 
-	// handle default precision
-	if (0 == precision)
-		precision = 2;
-
 	// check if UKSM is active
 	if (1 == active)
 	{
