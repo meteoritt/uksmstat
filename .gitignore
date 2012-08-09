@@ -1,2 +1,2 @@
-uksmstat
-uksmstat.o
+uksmstat/uksmstat
+uksmstat/*.o
