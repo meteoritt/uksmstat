@@ -52,8 +52,8 @@ int main(int argc, char **argv)
 {
 	// define vars
 	int opts = 0, active = 0, unshared = 0, shared = 0, scanned = 0, verbose = 0, precision = 0;
-	char *units;
-	unsigned long divisor = 0;
+	char *units = "MiB";
+	unsigned long divisor = 1024 * 1024;
 	struct stat sb;
 	FILE *f;
 
