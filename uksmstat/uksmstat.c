@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sysexits.h>
+#include <errno.h>
 
 #define UKSMDIR		"/sys/kernel/mm/uksm"
 #define UKSMRUN		UKSMDIR"/run"
@@ -124,8 +125,19 @@ int main(int argc, char **argv)
 			exit(EX_OSFILE);
 		}
 		unsigned int run;
+		errno = 0;
 		fscanf(f, "%d", &run);
-		fclose(f);
+		if (0 != errno)
+		{
+			fprintf(stderr, "Unable to read value from run file\n");
+			fclose(f);
+			exit(EX_OSFILE);
+		}
+		if (0 != fclose(f))
+		{
+			fprintf(stderr, "Unable to close run file\n");
+			exit(EX_OSFILE);
+		}
 
 		if (1 == run)
 			fprintf(stdout, "UKSM is active\n");
@@ -151,8 +163,19 @@ int main(int argc, char **argv)
 			exit(EX_OSFILE);
 		}
 		unsigned long long pages_unshared;
+		errno = 0;
 		fscanf(f, "%llu", &pages_unshared);
-		fclose(f);
+		if (0 != errno)
+		{
+			fprintf(stderr, "Unable to read value from pages_unshared file\n");
+			fclose(f);
+			exit(EX_OSFILE);
+		}
+		if (0 != fclose(f))
+		{
+			fprintf(stderr, "Unable to close pages_unshared file\n");
+			exit(EX_OSFILE);
+		}
 
 		switch (verbose)
 		{
@@ -178,8 +201,20 @@ int main(int argc, char **argv)
 			exit(EX_OSFILE);
 		}
 		unsigned long long pages_shared;
+		errno = 0;
 		fscanf(f, "%llu", &pages_shared);
-		fclose(f);
+		if (0 != errno)
+		{
+			fprintf(stderr, "Unable to read value from pages_sharing file\n");
+			fclose(f);
+			exit(EX_OSFILE);
+		}
+		if (0 != fclose(f))
+		{
+			fprintf(stderr, "Unable to close pages_sharing file\n");
+			exit(EX_OSFILE);
+		}
+
 		switch (verbose)
 		{
 			case 0:
@@ -204,8 +239,20 @@ int main(int argc, char **argv)
 			exit(EX_OSFILE);
 		}
 		unsigned long long pages_scanned;
+		errno = 0;
 		fscanf(f, "%llu", &pages_scanned);
-		fclose(f);
+		if (0 != errno)
+		{
+			fprintf(stderr, "Unable to read value from pages_scanned file\n");
+			fclose(f);
+			exit(EX_OSFILE);
+		}
+		if (0 != fclose(f))
+		{
+			fprintf(stderr, "Unable to close pages_scanned file\n");
+			exit(EX_OSFILE);
+		}
+
 		switch (verbose)
 		{
 			case 0:
