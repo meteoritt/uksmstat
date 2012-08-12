@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 			fprintf(stderr, "Unable to open run file\n");
 			exit(EX_OSFILE);
 		}
-		int run;
+		unsigned int run;
 		fscanf(f, "%d", &run);
 		fclose(f);
 
