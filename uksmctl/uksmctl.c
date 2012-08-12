@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sysexits.h>
+#include <errno.h>
 
 #define UKSMDIR		"/sys/kernel/mm/uksm"
 #define UKSMRUN		UKSMDIR"/run"
@@ -103,8 +104,17 @@ int main(int argc, char **argv)
 			fprintf(stderr, "Unable to open run file\n");
 			exit(EX_OSFILE);
 		}
-		fprintf(f, "%d", 1);
-		fclose(f);
+		if (fprintf(f, "%d", 1) < 0)
+		{
+			fprintf(stderr, "Unable to write to run file\n");
+			fclose(f);
+			exit(EX_OSFILE);
+		}
+		if (0 != fclose(f))
+		{
+			fprintf(stderr, "Unable to close run file\n");
+			exit(EX_OSFILE);
+		}
 
 		switch (verbose)
 		{
@@ -127,8 +137,17 @@ int main(int argc, char **argv)
 			fprintf(stderr, "Unable to open run file\n");
 			exit(EX_OSFILE);
 		}
-		fprintf(f, "%d", 0);
-		fclose(f);
+		if (fprintf(f, "%d", 0) < 0)
+		{
+			fprintf(stderr, "Unable to write to run file\n");
+			fclose(f);
+			exit(EX_OSFILE);
+		}
+		if (0 != fclose(f))
+		{
+			fprintf(stderr, "Unable to close run file\n");
+			exit(EX_OSFILE);
+		}
 
 		switch (verbose)
 		{
@@ -151,8 +170,19 @@ int main(int argc, char **argv)
 			exit(EX_OSFILE);
 		}
 		unsigned int run = 0;
+		errno = 0;
 		fscanf(f, "%d", &run);
-		fclose(f);
+		if (0 != errno)
+		{
+			fprintf(stderr, "Unable to read run file\n");
+			fclose(f);
+			exit(EX_OSFILE);
+		}
+		if (0 != fclose(f))
+		{
+			fprintf(stderr, "Unable to close run file\n");
+			exit(EX_OSFILE);
+		}
 		
 		switch (run)
 		{
@@ -182,8 +212,17 @@ int main(int argc, char **argv)
 			fprintf(stderr, "Unable to open run file\n");
 			exit(EX_OSFILE);
 		}
-		fprintf(f, "%d", run);
-		fclose(f);
+		if (fprintf(f, "%d", run) < 0)
+		{
+			fprintf(stderr, "Unable to write to run file\n");
+			fclose(f);
+			exit(EX_OSFILE);
+		}
+		if (0 != fclose(f))
+		{
+			fprintf(stderr, "Unable to close run file\n");
+			exit(EX_OSFILE);
+		}
 
 		switch (run)
 		{
